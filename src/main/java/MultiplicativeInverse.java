@@ -1,40 +1,39 @@
+import java.math.BigInteger;
+
 /**
  * Created by nigelstuart on 12/4/16.
  */
 public class MultiplicativeInverse {
 
-    // private variables
-    private int varInverseX;
 
-    // constructors
     /**
-     * a constructor
-     * find the inverse of x in group m
-     * @param x
-     * @param m
-     * @author tandhy
+     * Get the inverse of a in group m.  This is a naive method
+     * to find modulor multiplicative inverse of 'a' under modulo 'm'.
+     *
+     * @param a - The number to get the inverse of.
+     * @param m - The group
      */
-    public MultiplicativeInverse(long x, long m)
-    {
-        // y is a multiplicative inverse of x modulo m if (xy) mod m = 1
-        int y = 1;
-        long remaining = 0;
-        while (remaining != 1)
-        {
-            remaining = ( x * y ) % m ;
-            y++;
-            // while loop will end if remaining = 1 and we will get Y
+    public static BigInteger find(BigInteger a, BigInteger m) {
+
+        a = a.mod(m);
+        BigInteger x = BigInteger.ONE;
+        for( ; x.compareTo(m) < 0; ) {
+            if (a.multiply(x).mod(m).equals(BigInteger.ONE)) {
+                System.out.println("Multiplicative Inverse of " + a + " and " + m + " is " + x );
+                return x;
+            }
+            x = x.add(BigInteger.ONE);
         }
 
-        varInverseX = y - 1;
+        System.out.println("No Multiplicative Inverse exists...");
+        return BigInteger.ZERO;
     }
 
-    /**
-     * @return the inverse of x in group m
-     * @author tandhy
-     */
-    public int getInverseX() {
-        return varInverseX;
+
+    public static void main(String[] args) {
+        BigInteger A = BigInteger.valueOf(3);
+        BigInteger M = BigInteger.valueOf(11);
+        BigInteger I = find(A, M);
     }
 
 }

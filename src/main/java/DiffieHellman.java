@@ -53,22 +53,34 @@ public class DiffieHellman {
         PUBLIC_KEY = G.modPow(PRIVATE_KEY, P);
     }
 
+    /**
+     * This emulates Eve.  We'll assume the data taken into this
+     * constructor are sniffed out over the network.
+     *
+     * @param prime - prime number
+     * @param base  - the base
+     */
+    public DiffieHellman(BigInteger prime, BigInteger base, BigInteger sharedKey) {
+        this.NAME = "Eve";
+        this.P = prime;
+        this.G = base;
+        PRIVATE_KEY = BigInteger.valueOf(7);
+        PUBLIC_KEY = G.modPow(PRIVATE_KEY, P);
+        SHARED_KEY = sharedKey;
+    }
+
     public void setPeerSharedKey(BigInteger sharedKey) {
         SHARED_KEY = sharedKey;
     }
 
+
     public BigInteger encrypt(String msg) {
-        System.out.println("Person " + NAME + "'s plain message is : " + msg);
+        System.out.println(NAME + " is preparing to encrypt plain message : \"" + msg + "\"");
         byte[] bytes = msg.getBytes();
         BigInteger M = new BigInteger(bytes);
-        System.out.println("Person " + NAME + "'s M = " + M);
-
-        //X = G.modPow(PRIVATE_KEY, P);
         X = SHARED_KEY.modPow(PRIVATE_KEY, P);
-
-        System.out.println("Person " + NAME + "'s X = " + X);
         BigInteger e = M.multiply(X);//.mod(P);
-        System.out.println("Person " + NAME + " encrypted message : " + e);
+        System.out.println(NAME + " encrypted message to be : " + e);
         return e;
     }
 
@@ -78,12 +90,11 @@ public class DiffieHellman {
         X = SHARED_KEY.modPow(PRIVATE_KEY, P);
 
 
-
-        System.out.println("Person " + NAME + "'got encrypted message : " + encryptedMsg);
-        BigInteger decryptedMsg = encryptedMsg.divide(X);//.mod(P);
+        System.out.println(NAME + " got encrypted message : " + encryptedMsg);
+        BigInteger decryptedMsg = encryptedMsg.divide(X);
         byte[] ba = decryptedMsg.toByteArray();
         String plainMsg = new String(ba);
-        System.out.println("Person " + NAME + " decrypted message to be : " + plainMsg);
+        System.out.println(NAME + " decrypted message to be : " + plainMsg);
         return plainMsg;
     }
 
@@ -115,9 +126,6 @@ public class DiffieHellman {
 
         System.out.println("Bob   : " + bob.SHARED_KEY + "^" + bob.PRIVATE_KEY + " % " + bob.P);
         BigInteger KeyBCalculates = bob.SHARED_KEY.modPow(bob.PRIVATE_KEY, bob.P);
-
-        //System.out.println("KeyACalculates : " + KeyACalculates);
-        //System.out.println("KeyBCalculates : " + KeyBCalculates);
 
 
         BigInteger e = alice.encrypt("Hi Bob");

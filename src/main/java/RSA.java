@@ -25,9 +25,8 @@ public class RSA {
         this.q = BigInteger.probablePrime(max/2, randomNumber);
         this.n = p.multiply(q);
         this.phi = (p.subtract(BigInteger.ONE)).multiply(q.subtract(BigInteger.ONE));
-        this.modulus    = p.multiply(q);
         this.publicKey  = new BigInteger("65537");
-        this.privateKey = publicKey.modInverse(phi);
+        this.privateKey = publicKey.modInverse(phi);  // TODO: replace the Java module for inverse with mine.
     }
 
 
@@ -37,7 +36,7 @@ public class RSA {
      * @return
      */
     BigInteger encrypt(BigInteger message) {
-        return message.modPow(publicKey, modulus);
+        return message.modPow(publicKey, n);
     }
 
 
@@ -47,7 +46,7 @@ public class RSA {
      * @return Decrypted numberical value of plain message.
      */
     BigInteger decrypt(BigInteger encryptedMsg) {
-        return encryptedMsg.modPow(privateKey, modulus);
+        return encryptedMsg.modPow(privateKey, n);
     }
 
     public String toString() {
@@ -56,7 +55,6 @@ public class RSA {
         s += "==========="                 + "\n";
         s += "public key  = " + publicKey  + "\n";
         s += "private key = " + privateKey + "\n";
-        s += "modulus     = " + modulus    + "\n";
         s += "p           = " + p          + "\n";
         s += "q           = " + q          + "\n";
         s += "n           = " + n          + "\n";
