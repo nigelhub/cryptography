@@ -17,7 +17,7 @@ class PollardRho {
     private final static SecureRandom random = new SecureRandom();
 
 
-    public static BigInteger runPollardRho(BigInteger number) {
+    public static BigInteger find(BigInteger number) {
         BigInteger divisor;
         BigInteger c  = new BigInteger(number.bitLength(), random);
         BigInteger x  = new BigInteger(number.bitLength(), random);
@@ -47,7 +47,7 @@ class PollardRho {
             return;
         }
 
-        BigInteger divisor = runPollardRho(number);
+        BigInteger divisor = find(number);
         factor(divisor);
         factor(number.divide(divisor));
     }

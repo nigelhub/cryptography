@@ -8,9 +8,9 @@ public class RSA {
     private final static SecureRandom randomNumber = new SecureRandom();
 
     // RSA attributes.
-    private BigInteger n;
+    public BigInteger n;
+    public BigInteger publicKey;
     private BigInteger privateKey;
-    private BigInteger publicKey;
     private BigInteger modulus;
     private BigInteger p;
     private BigInteger q;
@@ -25,7 +25,7 @@ public class RSA {
         this.q = BigInteger.probablePrime(max/2, randomNumber);
         this.n = p.multiply(q);
         this.phi = (p.subtract(BigInteger.ONE)).multiply(q.subtract(BigInteger.ONE));
-        this.publicKey  = new BigInteger("65537");
+        this.publicKey  = new BigInteger("65537");  // aka e
         this.privateKey = publicKey.modInverse(phi);  // TODO: replace the Java module for inverse with mine.
     }
 

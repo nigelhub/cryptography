@@ -71,19 +71,40 @@ public class RSABreak {
      *
      */
 
-    public static void crack(int n, int e) {
 
-        System.out.println(Math.sqrt(n));
-        System.out.println(Math.sqrt(n));
-        System.out.println(Math.sqrt(n));
-        System.out.println(Math.sqrt(n));
+    /**
+     * Function to find the original Text of encryptedText
+     *
+     * Steps are :
+     *
+     *    1. encryptedText and 2 public key are known : n, and encryptionKey. convert eMsg to BigInteger.
+     *
+     *    2. Factorization n with pollar Rho --> p and q
+     *
+     *    3. find the phiNumberN = (p-1) * (q-1)
+     *
+     *    4. find the inverse of encryptionKey in phiNumberN
+     *
+     *    5. find the m = cipherInteger^inverse mod n
+     *
+     * @param n    - The product of p * q
+     * @param pk   - the public key
+     */
+    public static void crack(BigInteger n, BigInteger pk) {
+
+        // Get factor of n
+        BigInteger p = PollardRho.find(n);
+        BigInteger q = n.divide(p);
+        BigInteger phi = (p.subtract(BigInteger.ONE)).multiply(q.subtract(BigInteger.ONE));
+        System.out.println("Found P (" + p + ") and Q (" + q + ")");
+
+        // FastExp to decrpt the message.
     }
 
     public static void main(String[] args) {
-        int n = 115;
-        int e = 5;
+        BigInteger n = BigInteger.valueOf(115);
+        BigInteger e = BigInteger.valueOf(5);
         crack(n, e);
-        System.out.println("\n\n"+PrimitiveRoot.find(BigInteger.valueOf(n)));
     }
 
 }
